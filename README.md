@@ -156,6 +156,8 @@ The `mems_malloc` function is responsible for allocating memory in the MeMS (Mem
 
 4. If no suitable hole is found in the existing memory segments, a new `main_node` is added, similar to the case when `main_head` is `NULL`. The new `main_node` is created with the calculated number of pages, and the allocation is attempted as described in step 2.
 
+5. This function returns NULL value if size of 0 is requested.
+
 In summary, the `mems_malloc` function attempts to allocate memory in a way that optimizes the use of existing memory segments. It looks for holes in the memory chain and tries to split them if necessary to accommodate the requested size. If no suitable holes are found, it creates a new memory segment to fulfill the allocation request. The function returns a virtual address where the allocated memory is located.
 
 ### mems_free(void\* ptr)
