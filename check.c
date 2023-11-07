@@ -10,10 +10,9 @@ int main()
     // name = "Hello world";
 
     int *ptr[0];
-    ptr[0] = (int *)mems_malloc(sizeof(int) * 0);
+    ptr[0] = (int *)mems_malloc(sizeof(int) * 1);
     ptr[0] = (int *)mems_get(ptr[0]);
     // // ptr[0] = (int *)malloc(sizeof(int) * 250);
-
     ptr[0][0] = 132;
     // printf("%d\n", ptr[0][0]);
 

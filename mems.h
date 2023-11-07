@@ -70,10 +70,10 @@ void mems_init()
     remaining_free_list_allocation = 0;
     free_list_allocation = mmap(NULL, PAGE_SIZE, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
 
-    if (current_free_list_allocation == MAP_FAILED)
+    if (free_list_allocation == MAP_FAILED)
     {
-        perror("mmap failed"); // Print an error message if mmap fails
-        // Handle the error appropriately, e.g., by returning an error code or exiting.
+        perror("Unable to allocate memory"); // Print an error message if mmap fails
+        exit(1);
     }
 
     current_free_list_allocation = free_list_allocation;
@@ -117,6 +117,11 @@ sub_node *add_sub_node(int no_pages, main_node *main_node)
     if (sizeof(sub_node) > remaining_free_list_allocation)
     {
         free_list_allocation = mmap(NULL, PAGE_SIZE, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+        if (free_list_allocation == MAP_FAILED)
+        {
+            perror("Unable to allocate memory"); // Print an error message if mmap fails
+            exit(1);
+        }
         current_free_list_allocation = free_list_allocation;
         remaining_free_list_allocation = PAGE_SIZE;
     }
@@ -134,6 +139,12 @@ sub_node *add_sub_node(int no_pages, main_node *main_node)
     new_node->end_virtual_address = new_node->start_virtual_address + new_node->size - 1;
     new_node->memory = mmap(NULL, no_pages * PAGE_SIZE, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
 
+    if (free_list_allocation == MAP_FAILED)
+    {
+        perror("Unable to allocate memory"); // Print an error message if mmap fails
+        exit(1);
+    }
+
     return new_node;
 }
 
@@ -143,6 +154,11 @@ main_node *add_main_node(int no_pages)
     if (sizeof(main_node) > remaining_free_list_allocation)
     {
         free_list_allocation = mmap(NULL, PAGE_SIZE, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+        if (free_list_allocation == MAP_FAILED)
+        {
+            perror("Unable to allocate memory"); // Print an error message if mmap fails
+            exit(1);
+        }
         current_free_list_allocation = free_list_allocation;
         remaining_free_list_allocation = PAGE_SIZE;
     }
@@ -182,6 +198,11 @@ void *split_sub_node(sub_node *sub_node_for_split, sub_node *sub_tail, int size)
     if (sizeof(sub_node) > remaining_free_list_allocation)
     {
         free_list_allocation = mmap(NULL, PAGE_SIZE, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+        if (free_list_allocation == MAP_FAILED)
+        {
+            perror("Unable to allocate memory"); // Print an error message if mmap fails
+            exit(1);
+        }
         current_free_list_allocation = free_list_allocation;
         remaining_free_list_allocation = PAGE_SIZE;
     }
@@ -319,13 +340,18 @@ void mems_print_stats()
     int sub_node_count = 0;
     int total_pages = 0;
     int total_unused_memory = 0;
-    int sub_chain[1000000];
+    int sub_chain[999999];
     int sub_chain_count = 0;
 
     main_node *main_loop_pointer = main_head;
     sub_node *sub_loop_pointer = NULL;
     while (main_loop_pointer != NULL)
     {
+        // if (main_node_count >= 999999)
+        // {
+        //     printf("ERROR: main_node_count exceeded 999999\n");
+        //     exit(1);
+        // }
         total_pages += main_loop_pointer->pages;
         print_main_node(main_loop_pointer);
         printf(" --> ");
