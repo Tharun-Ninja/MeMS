@@ -108,6 +108,8 @@ void mems_finish()
     current_free_list_allocation = NULL;
     remaining_free_list_allocation = 0;
     free_list_allocation = NULL;
+
+    printf("-------- Unmapping all memory [mems_finish] -------- \n")
 }
 
 sub_node *add_sub_node(int no_pages, main_node *main_node)
@@ -296,7 +298,7 @@ Returns: Nothing but should print the necessary information on STDOUT
 */
 void print_main_node(main_node *main_node)
 {
-    printf("M[%ld:%ld]", (long int)main_node->start_virtual_address, (long int)main_node->end_virtual_address);
+    printf("MAIN[%ld:%ld]", (long int)main_node->start_virtual_address, (long int)main_node->end_virtual_address);
 }
 void print_sub_node(sub_node *sub_node)
 {
@@ -308,13 +310,14 @@ void print_sub_node(sub_node *sub_node)
 
 void mems_print_stats()
 {
-    printf("\n--------------------------\n\n");
+    printf("\n");
 
-    int total_main_nodes = 0;
     int main_node_count = 0;
     int sub_node_count = 0;
     int total_pages = 0;
     int total_unused_memory = 0;
+    int sub_chain[1000000];
+    int sub_chain_count = 0;
 
     main_node *main_loop_pointer = main_head;
     sub_node *sub_loop_pointer = NULL;
@@ -324,6 +327,7 @@ void mems_print_stats()
         print_main_node(main_loop_pointer);
         printf(" --> ");
         sub_loop_pointer = main_loop_pointer->sub_head;
+        sub_chain_count = 0;
         while (sub_loop_pointer != NULL)
         {
             if (sub_loop_pointer->type == 0)
@@ -333,9 +337,11 @@ void mems_print_stats()
             printf(" <--> ");
             sub_loop_pointer = sub_loop_pointer->next;
             sub_node_count++;
+            sub_chain_count++;
         }
         printf("NULL\n");
         main_loop_pointer = main_loop_pointer->next;
+        sub_chain[main_node_count] = sub_chain_count;
         main_node_count++;
     }
     printf("\n");
@@ -343,7 +349,13 @@ void mems_print_stats()
     printf("Total Unused Memory: %d\n", total_unused_memory);
     printf("Total Main Nodes: %d\n", main_node_count);
     printf("Total Sub Nodes: %d\n", sub_node_count);
-    printf("\n--------------------------\n\n");
+    printf("Sub Chain: [");
+    for (int i = 0; i < main_node_count; i++)
+    {
+        printf("%d, ", sub_chain[i]);
+    }
+    printf("]\n");
+    printf("\n");
 }
 
 /*
