@@ -109,7 +109,7 @@ void mems_finish()
     remaining_free_list_allocation = 0;
     free_list_allocation = NULL;
 
-    printf("-------- Unmapping all memory [mems_finish] -------- \n")
+    printf("-------- Unmapping all memory [mems_finish] -------- \n");
 }
 
 sub_node *add_sub_node(int no_pages, main_node *main_node)

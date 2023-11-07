@@ -9,4 +9,4 @@ check: check.c mems.h
 	gcc -o check.out check.c
 	
 clean:
-	rm -rf example check
+	rm -rf *.out
