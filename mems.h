@@ -402,7 +402,7 @@ void mems_free(void *v_ptr)
         sub_loop_pointer = main_loop_pointer->sub_head;
         while (sub_loop_pointer != NULL)
         {
-            if (v_ptr >= sub_loop_pointer->start_virtual_address && v_ptr <= sub_loop_pointer->end_virtual_address && sub_loop_pointer->type == 1) // TODO:removing the type check sub_loop_pointer->type == 1
+            if (v_ptr >= sub_loop_pointer->start_virtual_address && v_ptr <= sub_loop_pointer->end_virtual_address && sub_loop_pointer->type == 1)
             {
                 sub_loop_pointer->type = 0;
                 freed_sub_node = sub_loop_pointer;
