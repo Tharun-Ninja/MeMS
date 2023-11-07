@@ -233,6 +233,9 @@ Returns: MeMS Virtual address (that is created by MeMS)
 */
 void *mems_malloc(size_t size)
 {
+    if (size <= 0)
+        return NULL;
+
     int no_pages = (int)(size / (PAGE_SIZE + 1)) + 1;
     if (main_head == NULL)
     {

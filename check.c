@@ -10,12 +10,12 @@ int main()
     // name = "Hello world";
 
     int *ptr[0];
-    ptr[0] = (int *)mems_malloc(sizeof(int) * 250);
+    ptr[0] = (int *)mems_malloc(sizeof(int) * 0);
     ptr[0] = (int *)mems_get(ptr[0]);
-    // ptr[0] = (int *)malloc(sizeof(int) * 250);
+    // // ptr[0] = (int *)malloc(sizeof(int) * 250);
 
     ptr[0][0] = 132;
-    printf("%d\n", ptr[0][0]);
+    // printf("%d\n", ptr[0][0]);
 
     // printf("\n------- Allocated virtual addresses [mems_malloc] -------\n");
     // for (int i = 0; i < 10; i++)
@@ -35,7 +35,7 @@ int main()
     // char *name2 = (char *)mems_malloc(sizeof(char) * 100);
     mems_print_stats();
     mems_finish();
-    mems_print_stats();
+    // mems_print_stats();
 
     return 0;
 }
